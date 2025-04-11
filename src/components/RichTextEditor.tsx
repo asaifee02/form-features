@@ -91,9 +91,11 @@ const RichTextEditor = ({
     if (!linkUrl) return;
     
     if (editor) {
+      // Using the correct method to set a link in TipTap
       editor
         .chain()
         .focus()
+        .extendMarkRange('link')
         .setLink({ href: linkUrl })
         .run();
     }
@@ -155,7 +157,7 @@ const RichTextEditor = ({
           </button>
           <button
             type="button"
-            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            onClick={() => editor.commands.toggleMark('underline')}
             className={cn("tiptap-toolbar-button", editor.isActive('underline') && "is-active")}
             aria-label="Underline"
           >
@@ -212,7 +214,7 @@ const RichTextEditor = ({
           
           <button
             type="button"
-            onClick={() => editor.chain().focus().setTextAlign('left').run()}
+            onClick={() => editor.commands.setTextAlign('left')}
             className={cn("tiptap-toolbar-button", editor.isActive({ textAlign: 'left' }) && "is-active")}
             aria-label="Align Left"
           >
@@ -220,7 +222,7 @@ const RichTextEditor = ({
           </button>
           <button
             type="button"
-            onClick={() => editor.chain().focus().setTextAlign('center').run()}
+            onClick={() => editor.commands.setTextAlign('center')}
             className={cn("tiptap-toolbar-button", editor.isActive({ textAlign: 'center' }) && "is-active")}
             aria-label="Align Center"
           >
@@ -228,7 +230,7 @@ const RichTextEditor = ({
           </button>
           <button
             type="button"
-            onClick={() => editor.chain().focus().setTextAlign('right').run()}
+            onClick={() => editor.commands.setTextAlign('right')}
             className={cn("tiptap-toolbar-button", editor.isActive({ textAlign: 'right' }) && "is-active")}
             aria-label="Align Right"
           >
@@ -236,7 +238,7 @@ const RichTextEditor = ({
           </button>
           <button
             type="button"
-            onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+            onClick={() => editor.commands.setTextAlign('justify')}
             className={cn("tiptap-toolbar-button", editor.isActive({ textAlign: 'justify' }) && "is-active")}
             aria-label="Justify"
           >
