@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -31,6 +31,13 @@ const DateTimeField = ({
   showTime = true
 }: DateTimeFieldProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  
+  // Set today's date as default value if value is null
+  useEffect(() => {
+    if (value === null) {
+      onChange(new Date());
+    }
+  }, []);
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!value) return;
@@ -78,7 +85,9 @@ const DateTimeField = ({
                   date.setHours(value.getHours(), value.getMinutes());
                 }
                 onChange(date);
+                // Close the calendar popover after date selection
                 if (!showTime) setIsOpen(false);
+                else setIsOpen(false); // Close even with time option enabled
               }}
               initialFocus
               className="rounded-md border animate-fade-in"
@@ -94,6 +103,10 @@ const DateTimeField = ({
               value={value ? format(value, 'HH:mm') : ''}
               onChange={handleTimeChange}
               className="max-w-[150px] focus-visible:ring-form-purple/30"
+              onBlur={() => {
+                // Optional: If you want to close any parent popover after time selection
+                // This can help if the time input is inside another popover
+              }}
             />
           </div>
         )}
