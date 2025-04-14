@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import * as LabelPrimitive from "@radix-ui/react-label"
 import { Slot } from "@radix-ui/react-slot"
@@ -93,7 +94,11 @@ const FormLabel = React.forwardRef<
   return (
     <Label
       ref={ref}
-      className={cn(error && "text-destructive", className)}
+      className={cn(
+        error && "text-destructive",
+        "transition-colors duration-200",
+        className
+      )}
       htmlFor={formItemId}
       {...props}
     />
@@ -155,7 +160,10 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      className={cn("text-sm font-medium text-destructive", className)}
+      className={cn(
+        "text-sm font-medium text-destructive animate-fade-in",
+        className
+      )}
       {...props}
     >
       {body}

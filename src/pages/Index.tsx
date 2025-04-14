@@ -5,6 +5,12 @@ import MultiSelect from '@/components/MultiSelect';
 import FileUpload from '@/components/FileUpload';
 import MultiFileUpload from '@/components/MultiFileUpload';
 import RichTextEditor from '@/components/RichTextEditor';
+import TextField from '@/components/TextField';
+import BooleanField from '@/components/BooleanField';
+import DateTimeField from '@/components/DateTimeField';
+import NumberField from '@/components/NumberField';
+import EmailField from '@/components/EmailField';
+import URLField from '@/components/URLField';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { PlusCircle } from 'lucide-react';
@@ -16,6 +22,14 @@ const Index = () => {
   const [fileValue, setFileValue] = useState<File | null>(null);
   const [multiFileValue, setMultiFileValue] = useState<File[]>([]);
   const [richTextValue, setRichTextValue] = useState('');
+  
+  // New form values state
+  const [nameValue, setNameValue] = useState('');
+  const [enableNotifications, setEnableNotifications] = useState(false);
+  const [dateValue, setDateValue] = useState<Date | null>(null);
+  const [ageValue, setAgeValue] = useState<number | null>(null);
+  const [emailValue, setEmailValue] = useState('');
+  const [websiteValue, setWebsiteValue] = useState('');
   
   // Define options for select inputs
   const countryOptions = [
@@ -49,8 +63,14 @@ const Index = () => {
     
     // Create form data object
     const formData = {
+      name: nameValue,
       country: singleSelectValue,
       interests: multiSelectValue,
+      enableNotifications,
+      dateTime: dateValue,
+      age: ageValue,
+      email: emailValue,
+      website: websiteValue,
       document: fileValue ? {
         name: fileValue.name,
         type: fileValue.type,
@@ -81,15 +101,73 @@ const Index = () => {
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-8">
-          <SingleSelect
-            label="Country"
-            options={countryOptions}
-            value={singleSelectValue}
-            onChange={setSingleSelectValue}
-            placeholder="Select your country"
+          <TextField
+            label="Full Name"
+            value={nameValue}
+            onChange={setNameValue}
+            placeholder="Enter your full name"
             required
-            description="Please select the country where you currently reside."
+            description="Please enter your first and last name."
+            pattern="^[a-zA-Z]+(?: [a-zA-Z]+)+$"
           />
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            <EmailField
+              label="Email Address"
+              value={emailValue}
+              onChange={setEmailValue}
+              placeholder="your.email@example.com"
+              required
+              description="We'll never share your email with anyone else."
+            />
+            
+            <URLField
+              label="Website"
+              value={websiteValue}
+              onChange={setWebsiteValue}
+              placeholder="https://yourwebsite.com"
+              description="Your company or personal website URL."
+            />
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            <NumberField
+              label="Age"
+              value={ageValue}
+              onChange={setAgeValue}
+              placeholder="Enter your age"
+              min={18}
+              max={120}
+              description="You must be at least 18 years old."
+            />
+            
+            <DateTimeField
+              label="Appointment Date & Time"
+              value={dateValue}
+              onChange={setDateValue}
+              description="When would you like to schedule your appointment?"
+            />
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            <SingleSelect
+              label="Country"
+              options={countryOptions}
+              value={singleSelectValue}
+              onChange={setSingleSelectValue}
+              placeholder="Select your country"
+              required
+              description="Please select the country where you currently reside."
+            />
+            
+            <BooleanField
+              label="Enable Notifications"
+              value={enableNotifications}
+              onChange={setEnableNotifications}
+              description="Receive updates about your account and new features."
+              variant="switch"
+            />
+          </div>
           
           <MultiSelect
             label="Interests"
@@ -130,7 +208,7 @@ const Index = () => {
             <Button 
               type="submit" 
               size="lg"
-              className="bg-form-purple hover:bg-form-purple-dark"
+              className="bg-form-purple hover:bg-form-purple-dark transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-form-purple/20"
             >
               <PlusCircle className="mr-2 h-5 w-5" /> Submit Form
             </Button>
